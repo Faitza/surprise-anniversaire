@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pour toi, mon amour 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #0a0a1a;
+            color: white;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Écrans */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease;
+            background: #0a0a1a;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        /* ÉCRAN 1 */
+        .main-countdown {
+            font-size: clamp(3.5rem, 15vw, 7rem);
+            font-weight: 300;
+            color: #ffddaa;
+            text-shadow: 0 0 30px #ffaa88;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .music-start-btn {
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+            transition: all 0.3s;
+        }
+
+        .music-start-btn:hover { transform: scale(1.05); background: #ff4d7d; }
+
+        /* ÉCRAN 2 - DÉCOMPTE */
+        .big-number {
+            font-size: clamp(8rem, 25vw, 15rem);
+            font-weight: 900;
+            text-shadow: 0 0 50px #ff3366;
+            animation: pulse 0.8s infinite alternate;
+        }
+
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+        /* ÉCRAN 4 - TEXTE & SCROLL */
+        #screen4 {
+            overflow-y: auto;
+            background: #0a0a1a;
+            display: block;
+        }
+
+        /* Barre de défilement personnalisée */
+        #screen4::-webkit-scrollbar { width: 6px; }
+        #screen4::-webkit-scrollbar-track { background: #0a0a1a; }
+        #screen4::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #ff3366, #ffaaff);
+            border-radius: 10px;
+        }
+
+        .text-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 150px 25px;
+            text-align: center;
+        }
+
+        .text-line {
+            font-size: clamp(1.4rem, 5vw, 2.2rem);
+            line-height: 1.6;
+            color: #fff5ee;
+            margin: 45px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s ease;
+        }
+
+        .text-line.visible { opacity: 1; transform: translateY(0); }
+        .spacer { height: 60px; }
+
+        .signature {
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            color: #ffaaff;
+            margin: 100px 0 40px;
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 2s;
+            line-height: 1.4;
+        }
+
+        .signature.visible { opacity: 1; }
+
+        .replay-btn {
+            background: transparent;
+            border: 2px solid #ff3366;
+            color: #ff3366;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.3s;
+            font-size: 1rem;
+            margin-bottom: 50px;
+        }
+
+        .replay-btn.visible { opacity: 1; }
+        .replay-btn:hover { background: #ff3366; color: white; }
+
+        #youtube-player { position: absolute; top: -500px; }
+    </style>
+</head>
+<body>
+
+    <div id="youtube-player"></div>
+
+    <div class="screen" id="screen1">
+        <div class="main-countdown" id="countdown">--:--:--</div>
+        <div style="color: #aa88aa; letter-spacing: 2px;">AVANT TA SURPRISE</div>
+        <button class="music-start-btn" id="startMusicBtn">🎵 Lancer l'ambiance & Patienter</button>
+    </div>
+
+    <div class="screen hidden" id="screen2">
+        <div class="big-number" id="countdown10">10</div>
+    </div>
+
+    <div class="screen hidden" id="screen3" style="background: white;">
+        <div style="font-size: 10rem; color: #ff3366; font-weight: 900;">BOUM</div>
+    </div>
+
+    <div class="screen hidden" id="screen4">
+        <div class="text-container" id="textContent">
+            <div class="text-line">Il était une fois,</div>
+            <div class="text-line">Bien avant que nos chemins ne se croisent,</div>
+            <div class="text-line">Un monde qui existait sans moi le sachant,</div>
+            <div class="text-line">Un monde qui t'attendait sans que tu le saches.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Il y avait des matins ordinaires,</div>
+            <div class="text-line">Des soleils sans histoire,</div>
+            <div class="text-line">Des nuits qui passaient sans laisser de trace.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Puis un jour,</div>
+            <div class="text-line">Une rencontre est devenue possible.</div>
+            <div class="text-line">Comme si l'univers, patiemment,</div>
+            <div class="text-line">Avait tissé les fils sans nous le dire.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Un regard a tout changé.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Depuis, le monde a pris une autre couleur.</div>
+            <div class="text-line">Les arbres sont plus verts,</div>
+            <div class="text-line">La lumière plus douce,</div>
+            <div class="text-line">Et le silence a trouvé une voix : la tienne.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Avec toi, j'ai appris que l'amour</div>
+            <div class="text-line">N'est pas un mot qu'on écrit,</div>
+            <div class="text-line">Mais une main qu'on tend,</div>
+            <div class="text-line">Une présence qu'on offre,</div>
+            <div class="text-line">Un souffle qu'on partage.</div>
+        
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Je pense à nos silences,</div>
+            <div class="text-line">Ceux où tout se dit sans mots,</div>
+            <div class="text-line">Dans la chaleur d'une épaule,</div>
+            <div class="text-line">Dans la douceur d'un regard.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Aujourd'hui, c'est ton jour.</div>
+            <div class="text-line">Le jour où le monde t'a choisi,</div>
+            <div class="text-line">Le jour où la vie t'a fait naître,</div>
+            <div class="text-line">Sans savoir qu'en te donnant au monde,</div>
+            <div class="text-line">Elle me donnait la plus belle des raisons d'être.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Ce message est une promesse :</div>
+            <div class="text-line">Être là, demain comme aujourd'hui,</div>
+            <div class="text-line">Dans les tempêtes comme dans les calmes,</div>
+            <div class="text-line">Dans les rires comme dans les larmes.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">C'est une déclaration :</div>
+            <div class="text-line">Sans toi, je ne serais pas tout à fait moi.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">C'est un merci :</div>
+            <div class="text-line">Merci d'exister.</div>
+            <div class="text-line">Merci d'être l'homme que tu es.</div>
+            <div class="text-line">Merci d'être entré dans ma vie,</div>
+            <div class="text-line">Et de ne plus en être reparti.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Aujourd'hui, je ne fête pas une date.</div>
+            <div class="text-line">Je fête toi.</div>
+            <div class="text-line">L'homme qui rend tout plus beau.</div>
+            
+            <div class="spacer"></div>
+            
+            <div class="text-line">Joyeux anniversaire, ma vie.</div>
+            <div class="text-line">Que cette nouvelle année</div>
+            <div class="text-line">Soit remplie de tout ce que tu mérites :</div>
+            <div class="text-line">Du bonheur, de la paix, de la joie,</div>
+            <div class="text-line">Et de tout cet amour</div>
+            <div class="text-line">Que je n'ai pas fini de te donner.</div>
+            
+            <div class="signature" id="signature">
+                Avec tout mon cœur,<br>
+                Pour toujours,<br>
+                Faitza 💕
+            </div>
+            
+            <button class="replay-btn" id="replayBtn" onclick="restartAnimation()">✨ Rejouer l'animation</button>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        let player;
+        const videoID = 'BFGfWDeQjBs'; 
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0', width: '0', videoId: videoID,
+                playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': videoID }
+            });
+        }
+
+        document.getElementById('startMusicBtn').addEventListener('click', function() {
+            player.playVideo();
+            this.innerHTML = "🎶 Musique activée... À tout de suite ❤️";
+            this.style.background = "#555";
+        });
+
+        // Date de fin (10 secondes pour tester)
+        const revealDate = new Date();
+        revealDate.setSeconds(revealDate.getSeconds() + 10); 
+
+        const countdownInterval = setInterval(() => {
+            const diff = revealDate - new Date();
+            if (diff <= 0) {
+                clearInterval(countdownInterval);
+                startSequence();
+                return;
+            }
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('countdown').textContent = `00:00:${s.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        function startSequence() {
+            document.getElementById('screen1').classList.add('hidden');
+            document.getElementById('screen2').classList.remove('hidden');
+            let c = 10;
+            const t = setInterval(() => {
+                c--;
+                if(c >= 1) document.getElementById('countdown10').textContent = c;
+                else { clearInterval(t); showBoom(); }
+            }, 800);
+        }
+
+        function showBoom() {
+            document.getElementById('screen2').classList.add('hidden');
+            document.getElementById('screen3').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('screen3').classList.add('hidden');
+                document.getElementById('screen4').classList.remove('hidden');
+                startTextAnimation();
+            }, 2000);
+        }
+
+        function startTextAnimation() {
+            const lines = document.querySelectorAll('.text-line');
+            let i = 0;
+            function next() {
+                if (i < lines.length) {
+                    lines[i].classList.add('visible');
+                    lines[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    i++;
+                    setTimeout(next, 2500); // 2.5 secondes par ligne pour bien lire
+                } else {
+                    document.getElementById('signature').classList.add('visible');
+                    document.getElementById('signature').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => {
+                        document.getElementById('replayBtn').classList.add('visible');
+                    }, 2000);
+                }
+            }
+            next();
+        }
+
+        function restartAnimation() {
+            document.querySelectorAll('.text-line').forEach(l => l.classList.remove('visible'));
+            document.getElementById('signature').classList.remove('visible');
+            document.getElementById('replayBtn').classList.remove('visible');
+            document.getElementById('screen4').scrollTo(0, 0);
+            startTextAnimation();
+        }
+    </script>
+</body>
+</html>
